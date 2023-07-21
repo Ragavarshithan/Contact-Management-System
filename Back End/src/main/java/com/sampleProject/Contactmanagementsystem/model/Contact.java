@@ -7,19 +7,19 @@ import java.util.Date;
 @Table(name="contact")
 public class Contact {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String emailId;
     private String address;
-    private Date dob;
+    private java.sql.Date dob;
 
     public Contact() {
     }
 
-    public Contact(long id, String firstName, String lastName, String phoneNumber, String emailId, String address, Date dob) {
+    public Contact(long id, String firstName, String lastName, String phoneNumber, String emailId, String address, java.sql.Date dob) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -81,7 +81,7 @@ public class Contact {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(java.sql.Date dob) {
         this.dob = dob;
     }
 }

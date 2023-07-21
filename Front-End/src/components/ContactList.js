@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 
 const ContactList = () => {
@@ -11,7 +12,7 @@ const ContactList = () => {
   
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/contact/list");
+        const response = await axios.get("http://localhost:8080/contact/view");
         setContact(response.data);
       } catch (error) {
         console.log(error);
@@ -33,6 +34,7 @@ const ContactList = () => {
   return (
     <div className='container'>
         <h2 className='text-center'>Contact List</h2>
+        <Link to = "/addcontact" className="btn btn-primary mb-2">Add Contact</Link>
         <table className="table table-bordered table-striped">
         <thead>
           <th>ID</th>
@@ -42,6 +44,7 @@ const ContactList = () => {
           <th>Email</th>
           <th>DOB</th>
           <th>Address</th>
+          <th>Action</th>
         </thead>
         <tbody>
           {
@@ -55,6 +58,9 @@ const ContactList = () => {
                 <td>{contact.emailId}</td>
                 <td>{contact.dob}</td>
                 <td>{contact.address}</td>
+                <td>
+                  <Link to={"/edit/${contact.id}"} className='btn btn-info'>Update</Link>
+                </td>
 
               </tr>
             )
