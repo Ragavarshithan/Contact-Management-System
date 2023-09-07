@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 
+
 const ContactList = () => {
     const [contacts,setContact]= useState([])
 
@@ -13,7 +14,17 @@ const ContactList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8080/contact/view");
-        setContact(response.data);
+        const sortedData = [...response.data].sort((a, b) => a.id - b.id);
+      setContact(sortedData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const handleDelete = async (id) => {
+      try {
+        await axios.delete(`http://localhost:8080/contact/${id}`);
+        fetchData(); // Refetch the data after successful deletion
       } catch (error) {
         console.log(error);
       }
@@ -32,7 +43,9 @@ const ContactList = () => {
       };
     }, []);
   return (
-    <div className='container'>
+    <div className='container'
+   
+    >
         <h2 className='text-center'>Contact List</h2>
         <Link to = "/addcontact" className="btn btn-primary mb-2">Add Contact</Link>
         <table className="table table-bordered table-striped">
@@ -48,18 +61,18 @@ const ContactList = () => {
         </thead>
         <tbody>
           {
-            contacts.map(
-              contact =>
-              <tr key={contact.id}>
-                <td>{contact.id}</td>
-                <td>{contact.firstName}</td>
-                <td>{contact.lastName}</td>
-                <td>{contact.phoneNumber}</td>
-                <td>{contact.emailId}</td>
-                <td>{contact.dob}</td>
-                <td>{contact.address}</td>
+            contacts.map(({id,firstName,lastName,phoneNumber,emailId,dob,address})=>
+              <tr key={id}>
+                <td>{id}</td>
+                <td>{firstName}</td>
+                <td>{lastName}</td>
+                <td>{phoneNumber}</td>
+                <td>{emailId}</td>
+                <td>{dob}</td>
+                <td>{address}</td>
                 <td>
-                  <Link to={"/edit/${contact.id}"} className='btn btn-info'>Update</Link>
+                  <Link to={'/edit/'+id} className='btn btn-info'style={{ marginRight: '5px' }}>Update</Link>
+                  <button onClick={() => handleDelete(id)} className='btn btn-danger'>Delete</button>
                 </td>
 
               </tr>

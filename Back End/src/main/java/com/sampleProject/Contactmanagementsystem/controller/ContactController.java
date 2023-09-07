@@ -39,20 +39,34 @@ public class ContactController {
         return ResponseEntity.ok(contact);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact(@PathVariable long id,@RequestBody Contact contactDetails) {
+    @PatchMapping("/{id}")
+    public void updateContact(@PathVariable long id,@RequestBody Contact contactDetails) {
         Contact updateContact = contactRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contact not exist with id: " + id));
+        System.out.println("Id : "+ updateContact.getId());
 
         updateContact.setFirstName(contactDetails.getFirstName());
         updateContact.setLastName(contactDetails.getLastName());
-        updateContact.setPhoneNumber(contactDetails.getPhoneNumber());
         updateContact.setEmailId(contactDetails.getEmailId());
-        updateContact.setDob((Date) contactDetails.getDob());
         updateContact.setAddress(contactDetails.getAddress());
+        updateContact.setDob((Date) contactDetails.getDob());
+        updateContact.setPhoneNumber(contactDetails.getPhoneNumber());
+
 
         contactRepository.save(updateContact);
 
-        return ResponseEntity.ok(updateContact);
+        //return ResponseEntity.ok(updateContact);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<HttpStatus> deleteContact(@PathVariable long id){
+
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("contact not exist with id: " + id));
+
+        contactRepository.delete(contact);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 }
